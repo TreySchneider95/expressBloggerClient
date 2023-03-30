@@ -18,7 +18,7 @@ const BlogPage = (props)=>{
 
     useEffect(() => {
         axios
-        .get(urlEndPoint + '/' + 'single' + '/' + id)
+        .get(urlEndPoint + '/blogs/single/' + id)
         .then(res => {
           console.log(res.data);
           setBlog(res.data.blog[0])
@@ -27,7 +27,7 @@ const BlogPage = (props)=>{
           console.log("Error:" + err);
         })
   
-      },[])
+      },[urlEndPoint, id])
 
       const handleUpdateBlog = ()=>{
         const req = {
@@ -36,7 +36,7 @@ const BlogPage = (props)=>{
             author: author,
             categories: categories
           } 
-          axios.put(`${urlEndPoint}/update-one/${blog.title}`, req)
+          axios.put(`${urlEndPoint}/blogs/update-one/${blog.title}`, req)
           .then(function (response) {
             console.log(response);
           },{
@@ -45,7 +45,7 @@ const BlogPage = (props)=>{
       }
 
       const handleDeleteBlog = ()=>{
-        axios.delete(`${urlEndPoint}/single/${blog.title}`)
+        axios.delete(`${urlEndPoint}/blogs/single/${blog.title}`)
         .then(function(response){
             console.log("deleted")
         })
@@ -114,6 +114,7 @@ const BlogPage = (props)=>{
                                 setCategories(array);
                             }}
                             />
+                            <small id="categorieHelp" className="form-text text-muted">Enter each category seperated by commas no spaces.</small>
                         </div>
                     )}
                     <small><p>Created At: {blog.createdAt}</p></small>
@@ -123,7 +124,7 @@ const BlogPage = (props)=>{
                     onClick={() => {
                     setIsEditing(true);
                     }}
-                >Edit ToDo</button>
+                >Edit Blog</button>
                 }
                 {isEditing && <div><button type="button" className="btn btn-primary mx-2"
                     onClick={() => {
@@ -131,7 +132,7 @@ const BlogPage = (props)=>{
                     handleUpdateBlog()
                     window.location.reload()
                     }}
-                >Update ToDo</button>
+                >Update Blog</button>
                 <button type="button" className="btn btn-danger mx-2"
                     onClick={()=>{
                         setIsEditing(false)
@@ -148,7 +149,7 @@ const BlogPage = (props)=>{
                         }
                     }}
                 >
-                    Delete ToDo
+                    Delete Blog
                 </Link>}
         </div>
     )

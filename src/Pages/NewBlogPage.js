@@ -20,7 +20,7 @@ const NewBlogPage = (props) =>{
             categories: categories
           }
           
-          axios.post(`${urlEndPoint}/create-one`, req)
+          axios.post(`${urlEndPoint}/blogs/create-one`, req)
           .then((response)=>{
             console.log(response)
           })

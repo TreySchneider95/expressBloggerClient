@@ -6,25 +6,45 @@ import axios from 'axios';
 import HomePage from './Pages/HomePage';
 import BlogPage from './Pages/BlogPage';
 import NewBlogPage from './Pages/NewBlogPage';
+import NewUserPage from './Pages/NewUserPage';
+import LoginPage from './Pages/LoginPage';
+import ManageUsersPage from './Pages/ManageUsersPage';
 import Layout from './Layouts/Layout';
+import { useAuth } from "./Hooks/Auth";
+
 
 const urlEndPoint = process.env.REACT_APP_URL_ENDPOINT;
 
 function App() {
 
   const [blogList, setBlogList] = useState([]);
-
+  const [userList, setUserList] = useState([])
+  const auth = useAuth()
+  console.log(auth.isAdmin)
   useEffect(() => {
-    axios.get(`${urlEndPoint}/all`)
+    axios.get(`${urlEndPoint}/blogs/all`)
     .then(function (response) {
-      console.log(response);
+      // console.log(response);
       setBlogList(response.data.blogs);
     })
     .catch(function (error) {
       console.log(error);
     });
+    if(auth.isAdmin){
+      console.log("oooooooooooooo")
+      axios.get(`${urlEndPoint}/users/all`)
+      .then(function(resp){
+        console.log(resp.data.users)
+        setUserList(resp.data.users)
+      })
+      .catch(function(err){
+        console.log(err)
+      })
+    }
   },[])
 
+
+  console.log(userList)
   const router = createBrowserRouter([
     {
       path: "/",
@@ -50,6 +70,23 @@ function App() {
           element: <NewBlogPage 
               urlEndPoint={urlEndPoint} 
               />
+        },
+        {
+          path: "register",
+          element: <NewUserPage
+              urlEndPoint={urlEndPoint}
+              />
+        },
+        {
+          path: "login",
+          element: <LoginPage/>
+        },
+        {
+          path: "manage-users",
+          element: <ManageUsersPage
+                    userList={userList}
+                    urlEndPoint={urlEndPoint}
+                    />
         }
       ]
 
